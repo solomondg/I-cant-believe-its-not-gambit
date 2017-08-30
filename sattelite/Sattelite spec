@@ -1,0 +1,55 @@
+Commodore 64 style
+
+Set pallet of 256 colors
+Each pixel 1 byte? 
+
+Divide into 2x2 grids like c64, pix = 0.5 nibble? 
+
+
+
+I Can't Belive It's Not Gambit! v1s: Medium-high resolution, extremely low reliability, extremely low bandwidth, low framerate
+
+Specs:
+
+All sent images are 1:2 res. Non-1:2 aspect ratios are supported by lopping off part of it and re-shaping into 1:2.
+
+
+Max image res: 32768 x 16384
+
+Definition Frames: 
+
+Sent 1/sec 
+Contains information about adjusted resolution:
+[
+package type [uint4]
+res x (uint12)
+res y (uint12)
+]
+
+Transmitted resolution can be found with:
+sqrt(1/2 * resx * resy)
+
+Def frames maybe not needed?
+
+
+15 bit color
+
+Each packet is 508 bytes, contains 4x8 pixel chunk (32 pixels) .
+Pixel chunks aren't actually touching. They're evenly spread out around the frame to allow for easy interleaving. Actual pixel positions are relative and given by resolution
+
+[
+package type (uint4)
+Pixel chunk xy (24 bit)
+Pixel data (32  * 15 = 480 bit) in simple snake order
+]
+
+Each pixel packet is simple 15bit color
+[
+r (uint5)
+g (uint5)
+b (uint5)
+]
+
+For 640x480 image, about 1/2 FPS.
+
+Groundstation: Active microsphere interpolation between recieved points, fakes quicker updating? Blur between previous frames? 
